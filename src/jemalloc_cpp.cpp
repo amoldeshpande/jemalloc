@@ -66,8 +66,12 @@ handleOOM(std::size_t size, bool nothrow) {
 		ptr = je_malloc(size);
 	}
 
-	if (ptr == nullptr && !nothrow)
-		std::__throw_bad_alloc();
+    if (ptr == nullptr && !nothrow)
+#if !_MSC_VER
+        std::__throw_bad_alloc();
+#else
+        throw std::bad_alloc();
+#endif
 	return ptr;
 }
 

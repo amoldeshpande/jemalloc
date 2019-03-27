@@ -1,0 +1,43 @@
+@echo off
+setlocal enabledelayedexpansion
+set BASH=%LocalAppData%\Atlassian\SourceTree\git_local\bin\bash.exe
+
+SET MC=%MALLOC_CONF%
+REM unit tests
+for /f %%a in (unittests.txt) do (
+set units=unit/%%~na !s!
+)
+REM echo !units!
+%BASH% test.sh !units!
+
+REM check_integration_prof
+for /f %%a in (integrationtests.txt) do (
+set integs=integration/%%~na !integs!
+)
+REM echo !integs!
+SET MALLOC_CONF="prof:true" 
+%BASH% test.sh !integs!
+
+SET MALLOC_CONF="prof:true,prof_active:false" 
+%BASH% test.sh !integs!
+
+REM check_integration_decay
+SET MALLOC_CONF="dirty_decay_ms:-1,muzzy_decay_ms:-1"
+%BASH% test.sh !integs!
+
+SET MALLOC_CONF="dirty_decay_ms:0,muzzy_decay_ms:0"
+%BASH% test.sh !integs!
+
+REM check_integration
+SET MALLOC_CONF=%MC%
+%BASH% test.sh !integs!
+
+
+REM check_stress
+for /f %%a in (stresstests.txt) do (
+set stresses=stress/%%~na !stresses!
+)
+%BASH% test.sh !stresses!
+
+popd
+exit /b

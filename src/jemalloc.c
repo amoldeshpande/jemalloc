@@ -64,6 +64,7 @@ bool	opt_junk_free =
 #endif
     ;
 
+JEMALLOC_EXPORT void JEMALLOC_NOTHROW je_malloc_stats_print(void(*write_cb)(void *, const char *), void *cbopaque, const char *opts);
 bool	opt_utrace = false;
 bool	opt_xmalloc = false;
 bool	opt_zero = false;

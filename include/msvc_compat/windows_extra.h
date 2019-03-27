@@ -3,4 +3,5 @@
 
 #include <errno.h>
 
+#include <warnings_disabled.h>
 #endif /* MSVC_COMPAT_WINDOWS_EXTRA_H */
