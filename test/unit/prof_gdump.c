@@ -8,7 +8,7 @@ prof_dump_open_intercept(bool propagate_err, const char *filename) {
 
 	did_prof_dump_open = true;
 
-	fd = open("/dev/null", O_WRONLY);
+	fd = open(NULL_DEVICE_NAME, O_WRONLY);
 	assert_d_ne(fd, -1, "Unexpected open() failure");
 
 	return fd;

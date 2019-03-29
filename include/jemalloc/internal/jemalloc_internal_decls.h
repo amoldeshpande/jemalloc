@@ -91,4 +91,10 @@ isblank(int c) {
 #endif
 #include <fcntl.h>
 
+#ifdef WIN32
+#define NULL_DEVICE_NAME "NUL"
+#else
+#define NULL_DEVICE_NAME "/dev/null"
+#endif
+
 #endif /* JEMALLOC_INTERNAL_H */

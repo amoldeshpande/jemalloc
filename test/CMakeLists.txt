@@ -7,7 +7,7 @@ add_library(testlib STATIC "")
 add_library(util_integration STATIC "")
 add_library(util_cpp STATIC "")
 
-SET(enable_prof ON)
+SET(enable_prof 1)
 SET(exe ".exe")
 SET(abi "none")
 SET(srcroot "${CMAKE_CURRENT_LIST_DIR}/")
@@ -174,7 +174,7 @@ foreach(file_path ${stress_test_list})
 
 target_compile_definitions(${filename} PRIVATE "-DJEMALLOC_STRESS_TEST")
   set_target_properties(${filename} PROPERTIES FOLDER "tests/stress_tests")
-  set_target_properties(${filename} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/test/$<CONFIG>/stress")
+  set_target_properties(${filename} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/test$<CONFIG>/stress")
   target_link_libraries(${filename}  ${LIBRARY_DIR}/libjemalloc_jet.lib testlib)
 endforeach()
 

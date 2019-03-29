@@ -1884,9 +1884,11 @@ prof_dump_file(tsd_t *tsd, bool propagate_err, const char *filename,
 	}
 
 	/* Dump /proc/<pid>/maps if possible. */
+#ifndef _WIN32
 	if (prof_dump_maps(propagate_err)) {
 		goto label_write_error;
 	}
+#endif
 
 	if (prof_dump_close(propagate_err)) {
 		return true;
