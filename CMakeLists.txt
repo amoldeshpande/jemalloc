@@ -57,6 +57,8 @@ set_target_properties(libjemalloc_jet PROPERTIES FOLDER "libjemalloc_jet")
 
 set(LIBRARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>)
 
+set(enable_cxx 1)
+
 add_subdirectory(src)
 
 add_subdirectory(test)

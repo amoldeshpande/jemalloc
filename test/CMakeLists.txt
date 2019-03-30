@@ -135,6 +135,7 @@ SET(integration_test_list
 	${CMAKE_CURRENT_LIST_DIR}/integration/thread_arena.c 
 	${CMAKE_CURRENT_LIST_DIR}/integration/thread_tcache_enabled.c 
 	${CMAKE_CURRENT_LIST_DIR}/integration/xallocx.c
+	${CMAKE_CURRENT_LIST_DIR}/integration/cpp/basic.cpp
 	)
 if(${enable_experimental_smallocx})
 SET(integration_test_list ${integration_test_list } ${CMAKE_CURRENT_LIST_DIR}/integration/smallocx.c)
@@ -153,14 +154,15 @@ endforeach()
 
 if(${enable_cxx})
 add_library(cpp_src STATIC "")
-add_library(cpp_integration STATIC "")
 target_sources(cpp_src PRIVATE ${PROJECT_SOURCE_DIR}/src/jemalloc_cpp.cpp)
 set_target_properties(cpp_src PROPERTIES FOLDER "testlibs")
 target_compile_definitions(cpp_src PRIVATE "-DJEMALLOC_INTEGRATION_TEST")
 
-target_sources(cpp_integration PRIVATE ${CMAKE_CURRENT_LIST_DIR}/integration/cpp/basic.cpp)
-set_target_properties(cpp_integration PROPERTIES FOLDER "testlibs")
-target_compile_definitions(cpp_integration PRIVATE "-DJEMALLOC_INTEGRATION_TEST")
+add_executable(basic ${CMAKE_CURRENT_LIST_DIR}/integration/cpp/basic.cpp)
+set_target_properties(basic PROPERTIES FOLDER "tests/integration_tests/basic")
+set_target_properties(basic PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/test/$<CONFIG>/integration/cpp")
+target_compile_definitions(basic PRIVATE "-DJEMALLOC_INTEGRATION_TEST")
+target_link_libraries(basic  ${LIBRARY_DIR}/libjemalloc_jet.lib testlib util_integration cpp_src)
 endif()
 
 SET(stress_test_list
@@ -187,11 +189,17 @@ file(GENERATE
 	OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/runtest_windows.cmd
 	INPUT ${CMAKE_CURRENT_LIST_DIR}/runtests_windows.cmd)
 
-STRING(REPLACE ";" "\n" output "${unit_test_list}")
+STRING(REPLACE ";" "\n" tempu "${unit_test_list}")
+STRING(REPLACE "/" "\\" output "${tempu}")
 file(GENERATE OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/unittests.txt CONTENT "${output}")
 
-STRING(REPLACE ";" "\n" output "${integration_test_list}")
+STRING(REPLACE ";" "\n" tempi "${integration_test_list}")
+STRING(REPLACE "/" "\\" output "${tempi}")
 file(GENERATE OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/integrationtests.txt CONTENT "${output}")
 
-STRING(REPLACE ";" "\n" output "${stress_test_list}")
+STRING(REPLACE ";" "\n" temps "${stress_test_list}")
+STRING(REPLACE "/" "\\" output "${temps}")
 file(GENERATE OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/stresstests.txt CONTENT "${output}")
+
+STRING(REPLACE "/" "\\" tempsrc "${CMAKE_CURRENT_LIST_DIR}")
+file(GENERATE OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/sourcepath.txt CONTENT "${tempsrc}")
