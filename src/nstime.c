@@ -105,7 +105,7 @@ nstime_get(nstime_t *time) {
 	FILETIME ft;
 	uint64_t ticks_100ns;
 
-	GetSystemTimeAsFileTime(&ft);
+	GetSystemTimePreciseAsFileTime(&ft);
 	ticks_100ns = (((uint64_t)ft.dwHighDateTime) << 32) | ft.dwLowDateTime;
 
 	nstime_init(time, ticks_100ns * 100);

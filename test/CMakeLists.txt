@@ -150,6 +150,7 @@ foreach(file_path ${integration_test_list})
   set_target_properties(${filename} PROPERTIES FOLDER "tests/integration_tests")
   set_target_properties(${filename} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/test/$<CONFIG>/integration")
   target_link_libraries(${filename}  ${LIBRARY_DIR}/libjemalloc_jet.lib testlib util_integration)
+  add_dependencies(${filename} testlib libjemalloc_jet)
 endforeach()
 
 if(${enable_cxx})
@@ -163,6 +164,7 @@ set_target_properties(basic PROPERTIES FOLDER "tests/integration_tests/basic")
 set_target_properties(basic PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/test/$<CONFIG>/integration/cpp")
 target_compile_definitions(basic PRIVATE "-DJEMALLOC_INTEGRATION_TEST")
 target_link_libraries(basic  ${LIBRARY_DIR}/libjemalloc_jet.lib testlib util_integration cpp_src)
+add_dependencies(basic testlib libjemalloc_jet util_integration cpp_src)
 endif()
 
 SET(stress_test_list
@@ -176,8 +178,9 @@ foreach(file_path ${stress_test_list})
 
 target_compile_definitions(${filename} PRIVATE "-DJEMALLOC_STRESS_TEST")
   set_target_properties(${filename} PROPERTIES FOLDER "tests/stress_tests")
-  set_target_properties(${filename} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/test$<CONFIG>/stress")
+  set_target_properties(${filename} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/test/$<CONFIG>/stress")
   target_link_libraries(${filename}  ${LIBRARY_DIR}/libjemalloc_jet.lib testlib)
+  add_dependencies(${filename} testlib libjemalloc_jet)
 endforeach()
 
 
